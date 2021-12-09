@@ -3,7 +3,6 @@ const object: any = new Object()
 
 object.dieter = 123
 
-
 map.delete("hi")
 
 // console.log(map, object)

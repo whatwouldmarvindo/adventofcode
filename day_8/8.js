@@ -51,91 +51,115 @@
 // fgae cfgab fg bagce
 // Because the digits 1, 4, 7, and 8 each use a unique number of segments, you should be able to tell which combinations of signals correspond to those digits. Counting only digits in the output values (the part after | on each line), in the above example, there are 26 instances of digits that use a unique number of segments (highlighted above).
 // In the output values, how many times do digits 1, 4, 7, or 8 appear?
-var fs = require('fs');
+var fs = require("fs")
 var data = fs
-    .readFileSync('./test.txt')
-    .toString()
-    .trim()
-    .split('\n')
-    .map(function (v) { return v.split('|'); })
-    .map(function (v) { return [v[0].split(' '), v[1].split(' ')]; });
-var allSegments = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+  .readFileSync("./test.txt")
+  .toString()
+  .trim()
+  .split("\n")
+  .map(function (v) {
+    return v.split("|")
+  })
+  .map(function (v) {
+    return [v[0].split(" "), v[1].split(" ")]
+  })
+var allSegments = ["a", "b", "c", "d", "e", "f", "g"]
 function decode(input) {
-    var patterns = input[1];
-    // solve know letterns
-    var pattern1 = patterns.find(function (p) { return p.length === 2; });
-    var pattern4 = patterns.find(function (p) { return p.length === 4; });
-    var pattern7 = patterns.find(function (p) { return p.length === 3; });
-    var possibleMaps = {
-        a: allSegments.filter(function (d) { return !pattern1.includes(d) && !pattern4.includes(d) && pattern7.includes(d); }),
-        b: allSegments.filter(function (d) { return !pattern1.includes(d) && pattern4.includes(d) && !pattern7.includes(d); }),
-        c: allSegments.filter(function (d) { return pattern1.includes(d) && pattern4.includes(d) && pattern7.includes(d); }),
-        d: allSegments.filter(function (d) { return !pattern1.includes(d) && pattern4.includes(d) && !pattern7.includes(d); }),
-        e: allSegments.filter(function (d) { return !pattern1.includes(d) && !pattern4.includes(d) && !pattern7.includes(d); }),
-        f: allSegments.filter(function (d) { return pattern1.includes(d) && pattern4.includes(d) && pattern7.includes(d); }),
-        g: allSegments.filter(function (d) { return !pattern1.includes(d) && !pattern4.includes(d) && !pattern7.includes(d); })
-    };
-    // Now that we've narrowed the input, we can brute force the rest...
-    var possibilities = [];
-    function bruteForceRemainingF(a, b, c, d, e) {
-        for (var _i = 0, _a = possibleMaps.f; _i < _a.length; _i++) {
-            var f = _a[_i];
-            if (f !== a && f !== b && f !== c && f !== d && f !== e) {
-                bruteForceRemainingG(a, b, c, d, e, f);
-            }
-        }
+  var patterns = input[1]
+  // solve know letterns
+  var pattern1 = patterns.find(function (p) {
+    return p.length === 2
+  })
+  var pattern4 = patterns.find(function (p) {
+    return p.length === 4
+  })
+  var pattern7 = patterns.find(function (p) {
+    return p.length === 3
+  })
+  var possibleMaps = {
+    a: allSegments.filter(function (d) {
+      return !pattern1.includes(d) && !pattern4.includes(d) && pattern7.includes(d)
+    }),
+    b: allSegments.filter(function (d) {
+      return !pattern1.includes(d) && pattern4.includes(d) && !pattern7.includes(d)
+    }),
+    c: allSegments.filter(function (d) {
+      return pattern1.includes(d) && pattern4.includes(d) && pattern7.includes(d)
+    }),
+    d: allSegments.filter(function (d) {
+      return !pattern1.includes(d) && pattern4.includes(d) && !pattern7.includes(d)
+    }),
+    e: allSegments.filter(function (d) {
+      return !pattern1.includes(d) && !pattern4.includes(d) && !pattern7.includes(d)
+    }),
+    f: allSegments.filter(function (d) {
+      return pattern1.includes(d) && pattern4.includes(d) && pattern7.includes(d)
+    }),
+    g: allSegments.filter(function (d) {
+      return !pattern1.includes(d) && !pattern4.includes(d) && !pattern7.includes(d)
+    }),
+  }
+  // Now that we've narrowed the input, we can brute force the rest...
+  var possibilities = []
+  function bruteForceRemainingF(a, b, c, d, e) {
+    for (var _i = 0, _a = possibleMaps.f; _i < _a.length; _i++) {
+      var f = _a[_i]
+      if (f !== a && f !== b && f !== c && f !== d && f !== e) {
+        bruteForceRemainingG(a, b, c, d, e, f)
+      }
     }
-    function bruteForceRemainingG(a, b, c, d, e, f) {
-        for (var _i = 0, _a = possibleMaps.g; _i < _a.length; _i++) {
-            var g = _a[_i];
-            console.log();
-        }
+  }
+  function bruteForceRemainingG(a, b, c, d, e, f) {
+    for (var _i = 0, _a = possibleMaps.g; _i < _a.length; _i++) {
+      var g = _a[_i]
+      console.log()
     }
-    function bruteForceRemainingE(a, b, c, d) {
-        for (var _i = 0, _a = possibleMaps.e; _i < _a.length; _i++) {
-            var e = _a[_i];
-            if (e !== a && e !== b && e !== c && e !== d) {
-                bruteForceRemainingF(a, b, c, d, e);
-            }
-        }
+  }
+  function bruteForceRemainingE(a, b, c, d) {
+    for (var _i = 0, _a = possibleMaps.e; _i < _a.length; _i++) {
+      var e = _a[_i]
+      if (e !== a && e !== b && e !== c && e !== d) {
+        bruteForceRemainingF(a, b, c, d, e)
+      }
     }
-    function bruteForceRemainingD(a, b, c) {
-        for (var _i = 0, _a = possibleMaps.d; _i < _a.length; _i++) {
-            var d = _a[_i];
-            if (d !== a && d !== b && d !== c) {
-                bruteForceRemainingE(a, b, c, d);
-            }
-        }
+  }
+  function bruteForceRemainingD(a, b, c) {
+    for (var _i = 0, _a = possibleMaps.d; _i < _a.length; _i++) {
+      var d = _a[_i]
+      if (d !== a && d !== b && d !== c) {
+        bruteForceRemainingE(a, b, c, d)
+      }
     }
-    function bruteForceRemainingC(a, b) {
-        for (var _i = 0, _a = possibleMaps.c; _i < _a.length; _i++) {
-            var c = _a[_i];
-            if (c !== a && c !== b) {
-                bruteForceRemainingD(a, b, c);
-            }
-        }
+  }
+  function bruteForceRemainingC(a, b) {
+    for (var _i = 0, _a = possibleMaps.c; _i < _a.length; _i++) {
+      var c = _a[_i]
+      if (c !== a && c !== b) {
+        bruteForceRemainingD(a, b, c)
+      }
     }
-    function bruteForceRemainingB(a) {
-        for (var _i = 0, _a = possibleMaps.b; _i < _a.length; _i++) {
-            var b = _a[_i];
-            if (b !== a) {
-                bruteForceRemainingC(a, b);
-            }
-        }
+  }
+  function bruteForceRemainingB(a) {
+    for (var _i = 0, _a = possibleMaps.b; _i < _a.length; _i++) {
+      var b = _a[_i]
+      if (b !== a) {
+        bruteForceRemainingC(a, b)
+      }
     }
-    function bruteForceRemainingA() {
-        for (var _i = 0, _a = possibleMaps.a; _i < _a.length; _i++) {
-            var a = _a[_i];
-            console.log('hi');
-            bruteForceRemainingB(a);
-        }
+  }
+  function bruteForceRemainingA() {
+    for (var _i = 0, _a = possibleMaps.a; _i < _a.length; _i++) {
+      var a = _a[_i]
+      console.log("hi")
+      bruteForceRemainingB(a)
     }
-    // Start brute forcing from digit "a"
-    bruteForceRemainingA();
-    // populate map so that every segment is mapped to the signal
+  }
+  // Start brute forcing from digit "a"
+  bruteForceRemainingA()
+  // populate map so that every segment is mapped to the signal
 }
 // Part 2
-decode(data);
+decode(data)
 // Part 1
 // console.log(`Unique digits: ${calcUniqueDigits(data)}`)
 // we can easily identify number 1, 4, 7 and 8
