@@ -1,30 +1,46 @@
-const fs = require('fs');
+const io = require('../common/io.ts');
 
-const data: {patterns: string[]; ouputs: string[]}[] = fs
-  .readFileSync('./test.txt', 'utf-8')
-  .split('\n')
-  .filter((l) => l.length > 0)
-  .map((entry: string) => {
-    const [patterns, outputs] = entry.split('|');
-    return {
-      patterns: patterns
-        .trim()
-        .split(' ')
-        .map((pattern) => pattern.split('').sort()),
-      outputs: outputs
-        .trim()
-        .split('')
-        .map((output) => output.split('').sort().join('')),
-    };
-  });
+// const data: {patterns: string[]; ouputs: string[]}[] = fs
+//   .readFileSync('./test.txt', 'utf-8')
+//   .split('\n')
+//   .filter((l) => l.length > 0)
+//   .map((entry: string) => {
+//     const [patterns, outputs] = entry.split('|');
+//     return {
+//       patterns: patterns
+//         .trim()
+//         .split(' ')
+//         .map((pattern) => pattern.split('').sort()),
+//       outputs: outputs
+//         .trim()
+//         .split('')
+//         .map((output) => output.split('').sort().join('')),
+//     };
+//   });
 
-  data.forEach(decode)
+const inputs: Input[] = io.readLines('input.txt').map((entry) => {
+  const [patterns, outputs] = entry.split('|');
+  return {
+    patterns: patterns
+      .trim()
+      .split(' ')
+      .map((pattern) => pattern.split('').sort()),
+    outputs: outputs
+      .trim()
+      .split(' ')
+      .map((output) => output.split('').sort().join('')),
+  };
+});
+
+type Input = { patterns: string[][], outputs: string[]}
+
+console.log(inputs)
 
 const allSegments = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
 function decode(input) {
   // solve know letterns
-  console.log(input)
+  console.log(input);
   const pattern1 = input.patterns.find((p) => p.length === 2);
   const pattern4 = input.patterns.find((p) => p.length === 4);
   const pattern7 = input.patterns.find((p) => p.length === 3);
