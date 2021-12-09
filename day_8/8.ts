@@ -1,22 +1,6 @@
 const io = require('../common/io.ts');
 
-// const data: {patterns: string[]; ouputs: string[]}[] = fs
-//   .readFileSync('./test.txt', 'utf-8')
-//   .split('\n')
-//   .filter((l) => l.length > 0)
-//   .map((entry: string) => {
-//     const [patterns, outputs] = entry.split('|');
-//     return {
-//       patterns: patterns
-//         .trim()
-//         .split(' ')
-//         .map((pattern) => pattern.split('').sort()),
-//       outputs: outputs
-//         .trim()
-//         .split('')
-//         .map((output) => output.split('').sort().join('')),
-//     };
-//   });
+type Input = { patterns: string[][], outputs: string[]}
 
 const inputs: Input[] = io.readLines('input.txt').map((entry) => {
   const [patterns, outputs] = entry.split('|');
@@ -32,15 +16,12 @@ const inputs: Input[] = io.readLines('input.txt').map((entry) => {
   };
 });
 
-type Input = { patterns: string[][], outputs: string[]}
-
-console.log(inputs)
-
 const allSegments = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
 function decode(input) {
-  // solve know letterns
   console.log(input);
+
+  // solve know letterns
   const pattern1 = input.patterns.find((p) => p.length === 2);
   const pattern4 = input.patterns.find((p) => p.length === 4);
   const pattern7 = input.patterns.find((p) => p.length === 3);
@@ -112,22 +93,3 @@ function decode(input) {
 
   // populate map so that every segment is mapped to the signal
 }
-
-// Part 2
-// decode();
-// Part 1
-// console.log(`Unique digits: ${calcUniqueDigits(data)}`)
-
-// we can easily identify number 1, 4, 7 and 8
-// we also know which signal should trigger segment a
-// we only need number 0, 2, 3, 5, 6 and 9 now
-
-// 0 -> legth 6, same as number 1, has a something that is not in the other two with length 6 -> solved
-// 2 -> length 5
-// 5 -> length 5
-// 3 -> length 5, has same as number 1  -> solved
-// 6 -> length 6                        -> solved
-// 9 -> length 6, has same as number 1  -> solved
-
-// how can I distinguish 2 and 5?
-//
