@@ -1,25 +1,24 @@
 // not my solution!! Credit goes to https://github.com/warriordog/advent-of-code-2021 for this solution as I was stuck at part 2
-export
-const io = require("../common/io.ts")
+import {readLines} from '../common/io'
 
 type Input = {patterns: string[][]; outputs: string[]}
 type tDecoder = {[key: string]: number}
 
-const inputs: Input[] = io.readLines("input.txt").map((entry) => {
-  const [patterns, outputs] = entry.split("|")
+const inputs: Input[] = readLines('input.txt').map((entry) => {
+  const [patterns, outputs] = entry.split('|')
   return {
     patterns: patterns
       .trim()
-      .split(" ")
-      .map((pattern) => pattern.split("").sort()),
+      .split(' ')
+      .map((pattern) => pattern.split('').sort()),
     outputs: outputs
       .trim()
-      .split(" ")
-      .map((output) => output.split("").sort().join("")),
+      .split(' ')
+      .map((output) => output.split('').sort().join('')),
   }
 })
 
-const allSegments = ["a", "b", "c", "d", "e", "f", "g"]
+const allSegments = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 const digitNumberMap = {
   abcefg: 0,
   cf: 1,
@@ -64,13 +63,13 @@ function decode(input: Input): tDecoder {
     for (const g of possibleMaps.g) {
       if (g !== a && g !== b && g !== c && g !== d && g !== e && g !== f) {
         const map = {}
-        map[a] = "a"
-        map[b] = "b"
-        map[c] = "c"
-        map[d] = "d"
-        map[e] = "e"
-        map[f] = "f"
-        map[g] = "g"
+        map[a] = 'a'
+        map[b] = 'b'
+        map[c] = 'c'
+        map[d] = 'd'
+        map[e] = 'e'
+        map[f] = 'f'
+        map[g] = 'g'
         possibilities.push(map)
       }
     }
@@ -122,27 +121,27 @@ function decode(input: Input): tDecoder {
             p
               .map((d) => map[d])
               .sort()
-              .join("")
+              .join('')
           ] !== undefined,
       ),
   )
 
   const pivot = {}
-  pivot[map.a] = "a"
-  pivot[map.b] = "b"
-  pivot[map.c] = "c"
-  pivot[map.d] = "d"
-  pivot[map.e] = "e"
-  pivot[map.f] = "f"
-  pivot[map.g] = "g"
+  pivot[map.a] = 'a'
+  pivot[map.b] = 'b'
+  pivot[map.c] = 'c'
+  pivot[map.d] = 'd'
+  pivot[map.e] = 'e'
+  pivot[map.f] = 'f'
+  pivot[map.g] = 'g'
 
   const decoder: tDecoder = {}
   for (const [oldSegments, value] of Object.entries(digitNumberMap)) {
     const newSegments = oldSegments
-      .split("")
+      .split('')
       .map((d) => pivot[d])
       .sort()
-      .join("")
+      .join('')
     decoder[newSegments] = value
   }
 
@@ -154,7 +153,7 @@ function decodeInput(input: Input): number {
   const decoder = decode(input)
 
   // convert all inputs
-  const numbers = input.outputs.map((o) => String(decoder[o])).join("")
+  const numbers = input.outputs.map((o) => String(decoder[o])).join('')
 
   return parseInt(numbers)
 }

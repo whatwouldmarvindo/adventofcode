@@ -3,16 +3,16 @@ const object: any = new Object()
 
 object.dieter = 123
 
-map.delete("hi")
+map.delete('hi')
 
 // console.log(map, object)
 
 object.dieter = null
-delete object["dieter"]
+delete object['dieter']
 
 // console.log(object)
 
 const set = new Set()
-set.add("onur")
-set.add("Onur")
+set.add('onur')
+set.add('Onur')
 console.log(set)

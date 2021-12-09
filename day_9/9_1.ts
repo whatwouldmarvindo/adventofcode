@@ -1,7 +1,7 @@
-export const io = require('../common/io')
+import {readLines} from '../common/io'
 
-const data: number[][] = io.readLines('./input.txt').map((v) => {
-  return v.split('').map(value => parseInt(value))
+const data: number[][] = readLines('./input.txt').map((v) => {
+  return v.split('').map((value) => parseInt(value))
 })
 
 let lows: number[] = []
