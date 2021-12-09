@@ -1,3 +1,4 @@
+// not my solution!! Credit goes to https://github.com/warriordog/advent-of-code-2021 for this solution as I was stuck at part 2
 const io = require("../common/io.ts")
 
 type Input = {patterns: string[][]; outputs: string[]}
