@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-export function readLines(path) {
+export function readLines(path): string[] {
   return fs
     .readFileSync(path, 'utf-8')
     .split('\n')
