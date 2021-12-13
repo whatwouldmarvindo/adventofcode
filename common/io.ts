@@ -12,3 +12,7 @@ export function readIntsLine(path: string): number[] {
     .flatMap((match) => match[0])
     .map((n) => parseInt(n))
 }
+
+export function readIntsGrid(path: string): number[][] {
+  return readLines(path).map((line) => line.split('').map((n) => parseInt(n)))
+}
