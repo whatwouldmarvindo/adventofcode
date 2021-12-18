@@ -1,6 +1,6 @@
 import {readSections} from '../common/io'
 export type point = {x: number; y: number}
-export type Data = {folds: [string, number][]; grid: point[]; width: point}
+export type Data = {folds: [string, number][]; grid: point[]}
 export type grid = Data['grid']
 // ['y', 3]
 export function parseInput(input: string[]): Data {
@@ -8,7 +8,6 @@ export function parseInput(input: string[]): Data {
   return {
     grid: grid,
     folds: parseFolds(input[1]),
-    width: getLength(grid),
   }
 }
 
@@ -29,9 +28,7 @@ export function fold({grid, folds}: Data) {
 }
 
 export function removeDuplicatePoints(grid: grid): grid {
-  grid = grid.map((v) => JSON.stringify(v)) as any
-  const set = [...new Set(grid.map((v) => JSON.stringify(v) as any))]
-  return set.map((v) => JSON.parse(v as any))
+  return [...new Set(grid.map((v) => JSON.stringify(v)))].map((v) => JSON.parse(v))
 }
 
 function parseGrid(grid: string): point[] {
@@ -43,12 +40,12 @@ function parseGrid(grid: string): point[] {
     })
 }
 
-function getLength(grid: point[]): point {
+export function getLength(grid: point[]): point {
   return grid.reduce(
-    (sum, curr) => {
-      sum.x = curr.x > sum.x ? curr.x : sum.x
-      sum.y = curr.y > sum.y ? curr.y : sum.y
-      return {x: sum.x + 1, y: sum.y + 1}
+    (high, curr) => {
+      high.x = curr.x > high.x ? curr.x : high.x
+      high.y = curr.y > high.y ? curr.y : high.y
+      return {x: high.x, y: high.y}
     },
     {x: 0, y: 0},
   )

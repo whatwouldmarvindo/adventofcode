@@ -10,3 +10,15 @@ X increases to the right while `Y` increases downwards
 There are `Y` and `X` folds.
 
 `Y` folds up so it only affects the the `Y` values of the points (that's good)
+
+# Solution for 13_2
+
+I decided to transform my solutioon in VSCode since there were some weird line breaks in the console
+
+
+░  ░ ░░░░ ░░░░ ░░░░  ░░  ░  ░  ░░    ░░
+░  ░ ░    ░       ░ ░  ░ ░  ░ ░  ░    ░
+░  ░ ░░░  ░░░    ░  ░    ░  ░ ░       ░
+░  ░ ░    ░     ░   ░    ░  ░ ░       ░
+░  ░ ░    ░    ░    ░  ░ ░  ░ ░  ░ ░  ░
+ ░░  ░░░░ ░    ░░░░  ░░   ░░   ░░   ░░
