@@ -28,22 +28,20 @@ export function pivotBoard(board: Board) {
   return pivoted
 }
 
-export function doRound(input: Input): {input: Input; lastDrawn: number} {
-  const lastDrawn = input.draws.shift()
-  for (const board of input.boards) {
+export function markBoards(boards: Board[], number: number) {
+  for (const board of boards) {
     for (const row of board) {
       for (const entry of row) {
-        if (entry.n == lastDrawn) {
+        if (entry.n == number) {
           entry.marked = true
         }
       }
     }
   }
-  return {input, lastDrawn}
 }
 
-export function findWinner(boards: Board[]): number | false {
-  let winner = false
+export function findWinner(boards: Board[]): number[] {
+  let winner = []
   for (let i = 0; i < boards.length; i++) {
     const board = boards[i]
     const pivot = pivotBoard(board)
@@ -52,8 +50,12 @@ export function findWinner(boards: Board[]): number | false {
     const markedNumbersInRow = board.map((l) => l.reduce((sum, curr) => (curr.marked ? sum + 1 : sum - 1), 0))
     const markedNumbersInColumn = pivot.map((l) => l.reduce((sum, curr) => (curr.marked ? sum + 1 : sum - 1), 0))
     if (markedNumbersInColumn.includes(5) || markedNumbersInRow.includes(5)) {
-      return i
+      winner.push(i)
     }
   }
   return winner
+}
+
+export function getScore(board: Board): number {
+  return board.reduce((rowSum, row) => rowSum + row.reduce((sum1, v) => (!v.marked ? sum1 + v.n : sum1), 0), 0)
 }
