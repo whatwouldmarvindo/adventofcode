@@ -1,9 +1,13 @@
 {
     "version": "0.2",
-    "ignorePaths": ["*.txt"],
+    "ignorePaths": [
+        "*.txt"
+    ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
-    "words": [],
+    "words": [
+        "mcbs"
+    ],
     "ignoreWords": [],
     "import": []
 }
