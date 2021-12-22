@@ -27,3 +27,33 @@ export function pivotBoard(board: Board) {
   }
   return pivoted
 }
+
+export function doRound(input: Input): {input: Input; lastDrawn: number} {
+  const lastDrawn = input.draws.shift()
+  for (const board of input.boards) {
+    for (const row of board) {
+      for (const entry of row) {
+        if (entry.n == lastDrawn) {
+          entry.marked = true
+        }
+      }
+    }
+  }
+  return {input, lastDrawn}
+}
+
+export function findWinner(boards: Board[]): number | false {
+  let winner = false
+  for (let i = 0; i < boards.length; i++) {
+    const board = boards[i]
+    const pivot = pivotBoard(board)
+
+    // check how many marked spots there are in each row and column
+    const markedNumbersInRow = board.map((l) => l.reduce((sum, curr) => (curr.marked ? sum + 1 : sum - 1), 0))
+    const markedNumbersInColumn = pivot.map((l) => l.reduce((sum, curr) => (curr.marked ? sum + 1 : sum - 1), 0))
+    if (markedNumbersInColumn.includes(5) || markedNumbersInRow.includes(5)) {
+      return i
+    }
+  }
+  return winner
+}
