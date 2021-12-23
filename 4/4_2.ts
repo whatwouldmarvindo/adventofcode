@@ -2,12 +2,14 @@ import {Board, markBoards, findWinner, getScore, parseInput} from './common'
 
 let {boards, draws} = parseInput('input.txt')
 let lastDrawn: number
-let lastWinner: Board[]
+let lastWinner: Board
 
 function removeBoards(boards: Board[], winner: number[]) {
   for (const i of winner) {
-    lastWinner = boards.splice(i, 1)
+    lastWinner = boards[i]
+    boards[i] = null
   }
+  return boards.filter((b) => b !== null)
 }
 
 do {
@@ -15,11 +17,12 @@ do {
   markBoards(boards, lastDrawn)
   const winner = findWinner(boards)
   if (winner.length > 0) {
-    removeBoards(boards, winner)
+    boards = removeBoards(boards, winner)
   }
 } while (boards.length != 0)
 
-const score = getScore(lastWinner[0])
+console.log(lastWinner)
+const score = getScore(lastWinner)
 const result = score * lastDrawn
 
 console.log(`The final board has a score of ${score}, multiplied with the last drawn number ${lastDrawn} is ${result}`)
