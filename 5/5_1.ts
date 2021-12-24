@@ -50,6 +50,9 @@ for (const [from, to] of hAndVLines) {
   matrix = drawLine([from[0], from[1], to[0], to[1]], matrix)
 }
 
-const result = matrix.reduce((sum, currentLine) => currentLine.reduce((prev, curr) => (curr >= 2 ? prev + 1 : prev), 0) + sum, 0)
+const result = matrix.reduce(
+  (sum, currentLine) => currentLine.reduce((prev, curr) => (curr >= 2 ? prev + 1 : prev), 0) + sum,
+  0,
+)
 
 console.log(`there are a total of ${result} points where two lines overlap`)
