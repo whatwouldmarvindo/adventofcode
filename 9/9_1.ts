@@ -5,7 +5,6 @@ const data: number[][] = readLines('./input.txt').map((v) => {
 })
 
 let lows: number[] = []
-console.log(data[0])
 
 for (let i = 0; i < data.length; i++) {
   const row = data[i]
