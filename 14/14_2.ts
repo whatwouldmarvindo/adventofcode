@@ -1,73 +1,83 @@
 import {readSections} from '../common/io'
 
-const inputSections = readSections('./input.txt')
-const template = inputSections[0].split('')
-const insertions = inputSections[1]
-  .split('\n')
-  .map((line) => line.split(' -> '))
-  .map((parts) => ({match: parts[0], insert: parts[1]}))
-
-// Set up pairs to count instead of each element individually
-// This allows all similar matches to be computed at the same time
-const pairCounts: Record<string, bigint> = Object.create(null)
-
-// fill the template with initial state
-for (let i = 0; i < template.length - 1; i++) {
-  const pair = template[i] + template[i + 1]
-  pairCounts[pair] = (pairCounts[pair] || 0n) + 1n
+function parseInput(path: string) {
+  const sections = readSections(path)
+  return {
+    template: sections[0].split(''),
+    insertions: sections[1]
+      .split('\n')
+      .map((line) => line.split(' -> '))
+      .map((parts) => ({match: parts[0], insert: parts[1]})),
+  }
 }
 
-// Run steps
-for (let i = 0; i < 40; i++) {
-  const increases = Object.create(null)
+const {template, insertions} = parseInput('./input.txt')
+
+// track all pairs together instead of each individually
+const pairs: Record<string, bigint> = {}
+
+// fill up all pairs
+for (let i = 0; i < template.length - 1; i += 1) {
+  const pair = template[i].toString() + template[i + 1].toString()
+  pairs[pair] = (pairs[pair] || 0n) + 1n
+}
+
+function step() {
+  // wait for all insertions to complete 
+  let newPairs: Record<string, bigint> = {}
 
   // Apply each insertion
-  for (const {match, insert} of insertions) {
-    // Compute how many to insert
-    const insertCount = pairCounts[match] || 0n
+  for (const {insert, match} of insertions) {
+    if (pairs[match]) {
+      const insertCount = (pairs[match] || 0n)
+      // console.log(`this is the match: ${match}`)
+      // console.log(`this is the insert: ${insert}`)
+      const newPair1 = match[0] + insert
+      const newPair2 = insert + match[1]
+      // console.log(`found the match ${match} and gonna insert ${insert}`)
+      newPairs[newPair1] = (newPairs[newPair1] || 0n) + insertCount
+      newPairs[newPair2] = (newPairs[newPair2] || 0n) + insertCount
 
-    // Increment the 1st new match
-    const newMatch1 = match.charAt(0) + insert
-    increases[newMatch1] = (increases[newMatch1] || 0n) + insertCount
+      // remove it from the "old" template so that it doesn't count again
+      pairs[match] = 0n
 
-    // Increment the 2nd new match
-    const newMatch2 = insert + match.charAt(1)
-    increases[newMatch2] = (increases[newMatch2] || 0n) + insertCount
-
-    // Remove the original match (it has been destroyed by splitting)
-    pairCounts[match] = 0n
-  }
-
-  // Apply increases to the total
-  for (let [key, increase] of Object.entries(increases)) {
-    const hi = increase as bigint
-    pairCounts[key] = (pairCounts[key] || 0n) + hi
-  }
-}
-
-// Count elements
-const elementCounts: Record<string, bigint> = Object.create(null)
-for (const [pair, count] of Object.entries(pairCounts)) {
-  // increase both elements
-  const [elm1, elm2] = pair
-  elementCounts[elm1] = (elementCounts[pair] || 0n) + count
-  elementCounts[elm2] = (elementCounts[pair] || 0n) + count
-}
-
-// Divide counts by two, because each is duplicated in pairs
-for (let [elem, count] of Object.entries(elementCounts)) {
-  if (count) {
-    // Increase odd by 1 to weird off-by-one bug
-    if (count % 2n === 1n) {
-      count++
+      // remove it from the "new" template so it doesn't show up more than it should
+      // newPairs[match] = (newPairs[match] || 1n) - 1n
     }
+  }
 
-    // Compute correct amount
-    elementCounts[elem] = count / 2n
+  // add new pairs to existing pairs
+  for (const key of Object.keys(newPairs)) {
+    pairs[key] = (pairs[key] || 0n) + newPairs[key]
   }
 }
 
-// Find most and least common
+for (let i = 0; i < 40; i++) {
+  step()
+}
+
+// calculate quantity of each element
+let elementCounts: Record<string, bigint> = {}
+for (const key of Object.keys(pairs)) {
+  // declare elements
+  const el1 = key[0]
+  const el2 = key[1]
+  const quantity = pairs[key]
+  elementCounts[el1] = (elementCounts[el1] || 0n) + quantity
+  elementCounts[el2] = (elementCounts[el2] || 0n) + quantity
+}
+
+// fix elements being counted twice (unless they are at the border of the template)
+for (const key of Object.keys(elementCounts)) {
+  const quantity = elementCounts[key]
+  if (quantity % 2n) {
+    elementCounts[key] = (elementCounts[key] + 1n) / 2n
+  } else {
+    elementCounts[key] = elementCounts[key] / 2n
+  }
+}
+
+// sort elements by quantity
 const elemCountArr = Array.from(Object.entries(elementCounts)).sort((e1, e2) => {
   const diff = e2[1] - e1[1]
   if (diff > 0) return 1
@@ -80,6 +90,4 @@ const leastCommon = elemCountArr[elemCountArr.length - 1]
 
 const result = mostCommon[1] - leastCommon[1]
 
-console.log(
-  `The most common element is ${mostCommon[0]} (Q=${mostCommon[1]}). Lest common element is ${leastCommon[0]} (Q=${leastCommon[1]}) \n The difference is ${result}`,
-)
+console.log(`The most common element is ${mostCommon[0]} with ${mostCommon[1]} occurrences. The least common is ${leastCommon[0]} with ${leastCommon[1]} occurrences. The resulting difference is ${result}`)
