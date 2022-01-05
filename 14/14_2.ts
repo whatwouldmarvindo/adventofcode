@@ -23,13 +23,13 @@ for (let i = 0; i < template.length - 1; i += 1) {
 }
 
 function step() {
-  // wait for all insertions to complete 
+  // wait for all insertions to complete
   let newPairs: Record<string, bigint> = {}
 
   // Apply each insertion
   for (const {insert, match} of insertions) {
     if (pairs[match]) {
-      const insertCount = (pairs[match] || 0n)
+      const insertCount = pairs[match] || 0n
       // console.log(`this is the match: ${match}`)
       // console.log(`this is the insert: ${insert}`)
       const newPair1 = match[0] + insert
@@ -90,4 +90,6 @@ const leastCommon = elemCountArr[elemCountArr.length - 1]
 
 const result = mostCommon[1] - leastCommon[1]
 
-console.log(`The most common element is ${mostCommon[0]} with ${mostCommon[1]} occurrences. The least common is ${leastCommon[0]} with ${leastCommon[1]} occurrences. The resulting difference is ${result}`)
+console.log(
+  `The most common element is ${mostCommon[0]} with ${mostCommon[1]} occurrences. The least common is ${leastCommon[0]} with ${leastCommon[1]} occurrences. The resulting difference is ${result}`,
+)

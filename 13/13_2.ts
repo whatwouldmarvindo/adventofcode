@@ -20,11 +20,6 @@ function printPaper({grid}: Data) {
   for (const {x, y} of grid) {
     paper[y][x] = '#'
   }
-
-  grid.map((line) =>
-
-  console.log(paper)
-
 }
 
 while (input.folds.length > 0) {
