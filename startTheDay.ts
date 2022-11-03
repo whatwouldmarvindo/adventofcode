@@ -86,16 +86,24 @@ function existFolder(name: string, path: string) {
 
 await createYearFolder()
 await createDayFolder()
+createDayFiles()
 
 async function createDayFolder() {
-  if (!existFolder(day!, `${basePath}/${year!}/${day!}`)) {
-    await Deno.mkdir(day!)
+  if (!existFolder(day!, `${basePath}/${year!}`)) {
+    return await Deno.mkdir(`${basePath}/${year}/${day!}`)
   }
 }
 
 async function createYearFolder() {
   if (!existFolder(year!, '.')) {
-    await Deno.mkdir(year!)
+    return await Deno.mkdir(year!)
+  }
+}
+
+function createDayFiles() {
+  const files = [`${day}_1.ts`, `${day}_2.ts`, `${day}_test`, `${day}_input`, `README.md`]
+  for (const file of files) {
+    Deno.create(`${basePath}/${year}/${day}/${file}`)
   }
 }
 // let day = prompt('What day?')
