@@ -1,5 +1,4 @@
 import {inverse} from 'https://deno.land/std@0.160.0/fmt/colors.ts'
-import * as path from 'https://deno.land/std@0.97.0/path/mod.ts'
 
 const year = getYear()
 const day = getDay()
@@ -101,25 +100,11 @@ async function createYearFolder() {
 }
 
 function createDayFiles() {
-  const files = [`${day}_1.ts`, `${day}_2.ts`, `${day}_test`, `${day}_input`, `README.md`]
+  const files = [`1.ts`, `2.ts`, `test`, `input`, 'common.ts']
   for (const file of files) {
-    Deno.create(`${basePath}/${year}/${day}/${file}`)
+    Deno.create(`${basePath}/${year}/${day}/${day}_${file}`)
   }
 }
-// let day = prompt('What day?')
-
-// let folderString = ''
-// if (day!.length < 2) {
-//   folderString = `day0${day}`
-// }
-
-// console.log(`year ${year} and day ${day}`)
-
-// if (folders.includes(day as string)) {
-//   throw new Error('Day is already there')
-// } else {
-//   Deno.mkdir(`./day${day}`)
-// }
 
 enum Err {
   outOfRange,
