@@ -7,8 +7,9 @@ const basePath = new URL('.', Deno.mainModule).pathname
 function getYear(): string {
   let yearInput: string
   do {
-    const y = prompt('What year?')
-    yearInput = toString(y)
+    const curentYear = new Date().getFullYear()
+    const y = prompt(`What year? (${curentYear})`)
+    y === null ? (yearInput = curentYear.toString()) : (yearInput = y)
   } while (!validateYear(yearInput))
   return yearInput
 }
